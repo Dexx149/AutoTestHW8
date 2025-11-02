@@ -8,21 +8,18 @@ public class DataHelper {
     }
 
     public static AuthInfo getAuthInfo() {
-        var id = SqlHelper.getUserId();
-        var login = SqlHelper.getUserLogin();
-        var password = SqlHelper.getUserPassword();
-
-        return new AuthInfo(id, login, password);
+        return new AuthInfo("vasya", "qwerty123");
     }
-
-    public static VerificationCode getVerificationCodeFor(AuthInfo authInfo) {
-        var code = SqlHelper.getLastAuthCode(authInfo.getId());
+    public static VerificationCode getVerificationCodeFor(String login) {
+        var code = SqlHelper.getLastAuthCode(login);
+        if (code == null) {
+            throw new RuntimeException("No auth code found for user: " + login);
+        }
         return new VerificationCode(code);
     }
 
     @Value
     public static class AuthInfo {
-        String id;
         String login;
         String password;
     }

@@ -20,22 +20,6 @@ public class SqlHelper {
     }
 
     @SneakyThrows
-    public static String getUserId() {
-        var usersSQL = "SELECT id FROM users where login='vasya';";
-        try (var conn = getConnection()) {
-            return runner.query(conn, usersSQL, new ScalarHandler<String>());
-        }
-    }
-
-    @SneakyThrows
-    public static String getUserLogin() {
-        var usersSQL = "SELECT login FROM users where login='vasya';";
-        try (var conn = getConnection()) {
-            return runner.query(conn, usersSQL, new ScalarHandler<String>());
-        }
-    }
-
-    @SneakyThrows
     public static String getUserPassword() {
         var usersSQL = "SELECT password FROM users where login='vasya';";
         try (var conn = getConnection()) {
@@ -44,11 +28,20 @@ public class SqlHelper {
     }
 
     @SneakyThrows
-    public static String getLastAuthCode(String userId) {
-        var codeSQL = "SELECT code FROM auth_codes WHERE user_id = ? ORDER BY created DESC LIMIT 1;";
+    public static String getLastAuthCode(String login) {
+        var codeSQL = "SELECT code FROM auth_codes WHERE user_id = (SELECT id FROM users WHERE login = ?) ORDER BY created DESC LIMIT 1;";
         try (var conn = getConnection()) {
-            return runner.query(conn, codeSQL, new ScalarHandler<String>(), userId);
+            return runner.query(conn, codeSQL, new ScalarHandler<String>(), login);
         }
     }
 
+    @SneakyThrows
+    public static void cleanDatabase() {
+        try (var conn = getConnection()) {
+            runner.update(conn, "DELETE FROM card_transactions;");
+            runner.update(conn, "DELETE FROM auth_codes;");
+            runner.update(conn, "DELETE FROM cards;");
+            runner.update(conn, "DELETE FROM users;");
+        }
+    }
 }

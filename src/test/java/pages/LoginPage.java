@@ -13,7 +13,7 @@ public class LoginPage {
 
     public VerificationPage loginWith(DataHelper.AuthInfo authInfo) {
         loginField.setValue(authInfo.getLogin());
-        passwordField.setValue("qwerty123");
+        passwordField.setValue(authInfo.getPassword());
         loginButton.click();
         return new VerificationPage();
     }
