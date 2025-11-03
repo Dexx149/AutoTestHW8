@@ -1,5 +1,3 @@
-use appdb;
-
 DROP TABLE IF EXISTS users;
 CREATE TABLE users
 (
@@ -15,7 +13,7 @@ CREATE TABLE cards
     id                 CHAR(36) PRIMARY KEY,
     user_id            CHAR(36)           NOT NULL,
     number             VARCHAR(19) UNIQUE NOT NULL,
-    balance_in_kopecks  INT                NOT NULL,
+    balance_in_kopecks INT                NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 

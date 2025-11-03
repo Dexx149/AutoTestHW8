@@ -2,6 +2,8 @@ package helpers;
 
 import lombok.Value;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 public class DataHelper {
 
     private DataHelper() {
@@ -12,9 +14,7 @@ public class DataHelper {
     }
     public static VerificationCode getVerificationCodeFor(String login) {
         var code = SqlHelper.getLastAuthCode(login);
-        if (code == null) {
-            throw new RuntimeException("No auth code found for user: " + login);
-        }
+        assertNotNull(code, "No auth code found for user: " + login);
         return new VerificationCode(code);
     }
 

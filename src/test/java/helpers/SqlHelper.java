@@ -20,14 +20,6 @@ public class SqlHelper {
     }
 
     @SneakyThrows
-    public static String getUserPassword() {
-        var usersSQL = "SELECT password FROM users where login='vasya';";
-        try (var conn = getConnection()) {
-            return runner.query(conn, usersSQL, new ScalarHandler<String>());
-        }
-    }
-
-    @SneakyThrows
     public static String getLastAuthCode(String login) {
         var codeSQL = "SELECT code FROM auth_codes WHERE user_id = (SELECT id FROM users WHERE login = ?) ORDER BY created DESC LIMIT 1;";
         try (var conn = getConnection()) {
